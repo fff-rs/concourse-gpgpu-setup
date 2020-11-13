@@ -1,0 +1,23 @@
+root = "/media/cachy/containerd"
+state = "/run/containerd"
+#subreaper = true
+#oom_score = 0
+
+[grpc]
+address = "/run/containerd/containerd.sock"
+uid = 0
+gid = 0
+
+[debug]
+#  address = "/run/containerd/debug.sock"
+#  uid = 0
+#  gid = 0
+level = "debug"
+
+
+# only for nvidia host
+# !!! not necessary since this is already handled !!!
+# !!! by the nvidia-tools.json  hook definition !!!
+#[plugins]
+#[plugins.linux]
+#runtime = "nvidia-container-runtime"

@@ -1,0 +1,16 @@
+{
+    "version": "1.0.0",
+    "hook": {
+      "path": "/usr/bin/nvidia-container-runtime-hook",
+      "args": ["prestart"],
+      "env": [
+        "NVIDIA_REQUIRE_CUDA=cuda>=8.0",
+        "NVIDIA_VISIBLE_DEVICES=all",
+        "NVIDIA_DRIVER_CAPABILITIES=video,graphics,compute,utility"
+      ]
+    },
+    "when": {
+      "always": true
+    },
+    "stages": ["prestart"]
+  }

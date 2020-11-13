@@ -1,0 +1,12 @@
+[Unit]
+Description=containerd container runtime
+Documentation=https://containerd.io
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/containerd
+Delegate=yes
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
