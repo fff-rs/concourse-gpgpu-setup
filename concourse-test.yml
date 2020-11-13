@@ -1,0 +1,39 @@
+resources:
+- name: xxx
+  type: git
+  source:
+    branch: master
+    uri: https://github.com/spearow/concourse-gpgpu-setup.git
+
+- name: container
+  type: image-resource
+  source:
+    repository: nvidia/cuda
+# change to whatever release you installed
+    tag: 11.1-base
+
+
+jobs:
+  - name: check
+    build_logs_to_retain: 15
+    public: true
+    serial: true
+    plan:
+    - in_parallel:
+      - get: xxx
+        trigger: true
+      - get: container
+
+    - task: yakshaving
+      image: container
+      config:
+        platform: linux
+        inputs:
+        - name: xxx
+        run:
+          path: sh
+          args:
+          - -exc
+          - |
+            nvidia-smi
+          dir: xxx

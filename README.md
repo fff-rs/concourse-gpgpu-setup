@@ -14,6 +14,8 @@ Make sure to set the `serial: true` in your resources and apply a shared serial 
 
 All filesystems are formatted as `btrfs` with `compress=zstd:3`.
 
+There is a test pipeline defined in `councourse-test.yml`.
+
 ## Dead Ends
 
 The first attempt was to use `garden`/`gdn` directly to use the `nvidia-container` runtime, and also
@@ -29,6 +31,16 @@ garden does not care about the hooks and does not pass them on to the runc conta
 Copy the whole tree under `/etc` to your os, make sure the permissions are sane.
 
 ```sh
+# note that it is intentional to use rhel / centos 8
+dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.reposudo
+dnf clean all
+# do not install the nvidia driver from here!
+# Use the kernel module from https://negativo17.org/nvidia-driver/
+# which describes the compat with the upstream cuda https://github.com/negativo17/compat-nvidia-repo/issues/1
+# eventually one can use all packages from negativio17 for convenience, but right now there are multiple issues
+dnf config-manager --add-repo=https://negativo17.org/repos/fedora-nvidia.repo
+dnf install nvidia
+dnf -y install cuda-11-1
 
 dnf install -y \
     nvidia-container-runtime \
