@@ -32,6 +32,7 @@ Copy the whole tree under `/etc` to your os, make sure the permissions are sane.
 
 ```sh
 # note that it is intentional to use rhel / centos 8
+# the fedora repos sometimes lag behind a couple or releases(!)
 dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.reposudo
 dnf clean all
 # do not install the nvidia driver from here!
