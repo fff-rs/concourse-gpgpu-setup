@@ -1,0 +1,37 @@
+[Unit]
+Description=garden container management
+
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+After=network.target
+Requires=network.target
+After=containerd.service
+Requires=containerd.service
+RequiresMountsFor=/media/cachy
+ConditionPathIsDirectory=/media/cachy/concourse
+
+[Service]
+Type=simple
+Restart=always
+LimitNOFILE=50000
+TasksMax=50000
+User=root
+Group=root
+#ExecStartPre=-btrfschk --check --repair --backup /dev/yadayada
+ExecStartPre=-/usr/local/concourse/bin/gdn -v
+ExecStart=/usr/local/concourse/bin/gdn \
+        --config /etc/concourse/garden.ini \
+        server \
+        --use-containerd-for-processes \
+        --containerd-socket=/run/containerd/containerd.sock \
+        --log-level=info \
+        --bind-ip 127.0.0.1 \
+        --bind-port 7777 \
+        --depot /media/cachy/concourse/depot \
+        --properties-path /media/cachy/concourse/garden-properties.json \
+        --time-format rfc3339 \
+        --no-image-plugin
+
+RestartSec=3
+TimeoutStopSec=120
