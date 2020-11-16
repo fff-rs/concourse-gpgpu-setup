@@ -4,7 +4,7 @@ As part of the [spearow/juice](https://github.com/spearow/juice) efforts, it bec
 cuda™/cudnn access and eventually also rocm and OpenCL™ support from within the container without granting
 excessive privileges that would allow to remount the device tree.
 
-All instructions here are for [`Fedora 32` / `Fedora 33`](https://getfedora.org).
+All instructions here are for [`Fedora 32` / `Fedora 33`](https://getfedora.org). For Ubuntu-specific instructions, see ubuntu/README.md
 
 Assumes concourse is unpacked under `/usr/local`, such that `/usr/local/concourse/bin/{gdn,concourse}` exist.
 

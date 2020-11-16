@@ -1,0 +1,40 @@
+[Unit]
+Description=concourse worker %i
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+After=network.service
+Requires=network.service
+After=garden.service
+Requires=garden.service
+RequiresMountsFor=/media/cachy
+ConditionPathIsDirectory=/media/cachy/concourse
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=15s
+
+Environment=CONCOURSE_KEY_DIR=/etc/concourse/keys/worker
+Environment=CONCOURSE_WORK_DIR=/media/cachy/concourse
+#Environment=CONCOURSE_ENABLE_LIDAR=true
+
+ExecStartPre=-/usr/bin/mkdir ${CONCOURSE_WORK_DIR}
+ExecStartPre=-/usr/local/concourse/bin/concourse --version
+ExecStart=/usr/local/concourse/bin/concourse \
+        worker \
+        --name=%i \
+        --work-dir=${CONCOURSE_WORK_DIR} \
+        --tsa-host=ci.example.com:1111111 \
+        --tsa-worker-private-key=${CONCOURSE_KEY_DIR}/%i \
+        --tsa-public-key=${CONCOURSE_KEY_DIR}/tsa_host_key.pub \
+        --external-garden-url=http://localhost:7777/
+
+RestartSec=5
+RestartKillSignal=SIGUSR1
+KillMode=process
+KillSignal=SIGUSR2
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target
